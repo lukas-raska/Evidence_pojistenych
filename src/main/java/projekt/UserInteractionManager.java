@@ -32,42 +32,15 @@ public class UserInteractionManager {
     }
 
     /**
-     * Metoda pro načtení křestního od uživatele
+     * Metoda pro načítání textových dat od uživatele
      *
-     * @return Po validaci vstupu vrací křestní jméno
+     * @param prompt Výzva k zadání konkrétního vstupu (např. "Zadej křestní jméno")
+     * @return Vrací vstup zadaný uživatelem (validováno s ohledem na zadání prázdného vstupu)
      */
-    private String readFirstNameFromUser() {
+    private String readDataFromUser(String prompt) {
         String input = new String();
         while (input.isBlank()) {
-            System.out.print("Zadej křestní jméno: ");
-            input = scanner.nextLine().trim();
-        }
-        return input;
-    }
-
-    /**
-     * Metoda pro načtení příjmení od uživatele
-     *
-     * @return Po validaci vstupu vrací příjmení
-     */
-    private String readLastNameFromUser() {
-        String input = new String();
-        while (input.isBlank()) {
-            System.out.print("Zadej příjmení: ");
-            input = scanner.nextLine().trim();
-        }
-        return input;
-    }
-
-    /**
-     * Metoda pro načtení telefonního čísla od uživatele
-     *
-     * @return Vrací telefonní číslo
-     */
-    private String readPhoneNumberFromUser() {
-        String input = new String();
-        while (input.isBlank()) {
-            System.out.print("Zadej telefonní číslo: ");
+            System.out.println(prompt);
             input = scanner.nextLine().trim();
         }
         return input;
@@ -106,9 +79,9 @@ public class UserInteractionManager {
         printTextWithLines("PŘIDÁNÍ POJIŠTĚNÉ OSOBY:", "=");
         //přidání záznamu do databáze
         boolean succesfullyAdded = databaseOfInsureds.addRecord(
-                readFirstNameFromUser(),
-                readLastNameFromUser(),
-                readPhoneNumberFromUser(),
+                readDataFromUser("Zadej křestní jméno: "),
+                readDataFromUser("Zadej příjmení: "),
+                readDataFromUser("Zadej telefonní číslo: "),
                 readDateOfBirthFromUser()
         );
         //výpis
@@ -126,7 +99,10 @@ public class UserInteractionManager {
         //nadpis
         printTextWithLines("VYHLEDÁNÍ POJIŠTĚNÉ OSOBY", "=");
         //hledání v databázi
-        List<InsuredPerson> foundedInsuredPeople = databaseOfInsureds.searchByName(readFirstNameFromUser(), readLastNameFromUser());
+        List<InsuredPerson> foundedInsuredPeople = databaseOfInsureds.searchByName(
+                readDataFromUser("Zadej křestní jméno: "),
+                readDataFromUser("Zadej příjmení: ")
+        );
         //výpis
         if (foundedInsuredPeople.isEmpty()) {
             printTextWithLines("Záznam nenalezen.", "-");
